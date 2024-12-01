@@ -11,6 +11,7 @@ using namespace std;
 
 enum tokenType {TOKEN_DIAMONDS, TOKEN_GOLD, TOKEN_SILVER, TOKEN_SPICES, TOKEN_CLOTH, TOKEN_LEATHER, TOKEN_CAMELS, TOKEN_3_KIND, TOKEN_4_KIND, TOKEN_5_KIND, TOKEN_INVALID};
 
+// an individual token
 class token{
    private:
       tokenType type;
@@ -24,6 +25,7 @@ class token{
       friend ostream& operator<<(ostream& os, const token& c);
 };
 
+// a LIFO of tokens, order matters
 class tokenList{
    protected:
       vector<token> tokens;

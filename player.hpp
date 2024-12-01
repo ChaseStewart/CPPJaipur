@@ -1,4 +1,5 @@
 // player.hpp
+// player class definitions
 
 #include <vector>
 #include <string>
@@ -11,6 +12,7 @@ using namespace std;
 #if !defined __PLAYER_HPP_
 #define __PLAYER_HPP_
 
+// player state and actions
 class player
 {
    private:

@@ -7,6 +7,10 @@
 
 using namespace std;
 
+// add a card to the hand
+// since this only happens in controlled actions
+// there is no check for hand limit in this function
+// it was messing up the way exchange was implemented
 void player::addCard(card c)
 { 
    if (CARD_CAMELS != c.getType())
@@ -19,6 +23,7 @@ void player::addCard(card c)
    }
 }
 
+// add a token to the appropriate tokenList
 void player::addToken(token t)
 {
    tokenType type = t.getType(); 
@@ -74,7 +79,7 @@ void player::addToken(token t)
    };
 }
 
-
+// remove and return card at idx from player's hand
 card player::popCard(int idx)
 {
    if (idx >= HAND_LIMIT || handSize() == 0)
@@ -86,6 +91,7 @@ card player::popCard(int idx)
    return temp;
 }
 
+// remove and return card from player's camel "herd" 
 card player::popCamel()
 {
    if (handSize() == 0)
@@ -96,6 +102,7 @@ card player::popCamel()
    return card(CARD_CAMELS);
 }
 
+// calculate player's current score from tokens
 int player::calculateScore()
 {
    int score = 0;
@@ -142,6 +149,7 @@ int player::calculateScore()
    return score; 
 }
 
+// print player's hand and herd state
 void player::printPlayerState()
 {
    printHand(true);
@@ -149,6 +157,9 @@ void player::printPlayerState()
    cout << "Score: " << calculateScore();   
 }
 
+
+// print the cards in the player's hand
+// either in a compressed or indexed format
 void player::printHand(bool compressed)
 {
    if (compressed)
@@ -170,6 +181,7 @@ void player::printHand(bool compressed)
    }
 }
 
+// count all cards of provided cardType
 int player::countCardsByType(cardType t)
 {
    int sum = 0;
@@ -184,6 +196,8 @@ int player::countCardsByType(cardType t)
    return sum;
 }
 
+// remove all cards of provided cardType
+// obviously this is destructive
 void player::sellCardsByType(cardType t)
 {
    for (int i=handSize() -1; i >= 0; i--)

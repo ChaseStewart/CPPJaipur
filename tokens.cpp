@@ -8,21 +8,25 @@
 
 using namespace std;
 
+// define printing tokens to be printing the score
 ostream& operator<<(ostream& os, const token& c)
 {
    os << c.score;
    return os;
 }
 
+// shuffle the tokens in the tokenList
+// this is destructive
 void tokenList:: shuffle()
 {
    // Create a random number generator
-   std::random_device rd;
-   std::mt19937 g(rd());
+   random_device rd;
+   mt19937 g(rd());
    std::shuffle(tokens.begin(), tokens.end(), g); 
 }
 
-std::string token::typeToName(tokenType t)
+// return a string name for provided tokenType 
+string token::typeToName(tokenType t)
 {
    switch (t)
    {

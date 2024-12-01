@@ -31,6 +31,7 @@ enum playerActions {PA_NO_ACTION,
                     PA_VIEW_BOARD_STATE,
                     PA_VIEW_MY_STATE};
 
+// the game state and related methods
 class stateMachine
 {
    private:

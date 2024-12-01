@@ -10,6 +10,7 @@
 
 using namespace std;
 
+// initialize game state
 stateMachine::stateMachine(string p1name, string p2name)
 {
    players[0].init(0, p1name);
@@ -24,6 +25,9 @@ stateMachine::stateMachine(string p1name, string p2name)
    winner = -1;
 }
 
+// take one step through the game state machine
+// this is the main function that makes the game go
+// to be called in a while loop until GS_TERMINATE
 void stateMachine::step()
 {
    string playAgain; // for GS_GAME_OVER
@@ -114,7 +118,7 @@ void stateMachine::step()
    }
 }
 
-
+// return which player in [0,1] won the game
 int stateMachine::calculateWinner()
 {
    // Give camels_token to player with largest herd
@@ -133,12 +137,14 @@ int stateMachine::calculateWinner()
    return (players[0].calculateScore() > players[1].calculateScore()) ? 0 : 1;
 }
 
+// prompt the player to acknowledge that it is their turn
 void stateMachine::getPlayerAck(int id)
 {
    cout << players[id].getName()  << ", press any key to continue: ";
    getchar();
 }
 
+// receive and parse a choice of action from player[id]
 void stateMachine::getPlayerAction(int id)
 {
    const int STRLEN = 5;
@@ -199,6 +205,11 @@ void stateMachine::getPlayerAction(int id)
   };
 }
 
+// route a selected action to appropriate function call
+// if selected action is invalid or fails, next step
+// will be to repeat player action
+// if selected action succeeds, carry it out
+// and prompt next player for ACK
 bool stateMachine::executePlayerAction(int i)
 {
    switch (action)
@@ -235,6 +246,8 @@ bool stateMachine::executePlayerAction(int i)
    return true;
 }
 
+// perform the take good action
+// this can succeed or fail, only modify state if success
 bool stateMachine::executeTakeGood(int playerId)
 {
    if (players[playerId].handSize() >= players[playerId].HAND_LIMIT)
@@ -265,16 +278,24 @@ bool stateMachine::executeTakeGood(int playerId)
    return true;
 }
 
+// perform the view game state action
+// this always "fails" in the sense it doesn't end user's turn
+// no error is printed  
 void stateMachine::executeViewBoardState()
 {
    board.printGameState();
 }
 
+// perform the view current player state action
+// this always "fails" in the sense it doesn't end user's turn
+// no error is printed  
 void stateMachine::executeViewMyState(int id)
 {
    players[id].printPlayerState();
 }
 
+// perform the take all camels action
+// this can succeed or fail, only modify state if success
 bool stateMachine::executeTakeAllCamels(int id)
 {
    int camelCounter = 0;
@@ -295,6 +316,9 @@ bool stateMachine::executeTakeAllCamels(int id)
    return false;
 }
 
+// perform the exchange cards action
+// this can succeed or fail, only modify state if success
+// TODO this one needs cleanup 
 bool stateMachine::executeExchangeCards(int id)
 {
    string giveStr, recvStr, splitStr;
@@ -459,6 +483,8 @@ bool stateMachine::executeExchangeCards(int id)
    return true;
 }
 
+// perform the sell cards action
+// this can succeed or fail, only modify state if success
 bool stateMachine::executeSellGoods(int id)
 {
    int selection;
@@ -515,6 +541,8 @@ bool stateMachine::executeSellGoods(int id)
    return true;
 }
 
+// reset the game state machine and players and board
+// this is destructive 
 void stateMachine::reset()
 {
    string p1name = players[0].getName();
@@ -527,6 +555,7 @@ void stateMachine::reset()
    winner = -1;
 }
 
+// translate the provided goods cardType to its corresponding goods token
 tokenType stateMachine::cardTypeToTokenType(cardType t)
 {
    switch (t)
@@ -549,6 +578,8 @@ tokenType stateMachine::cardTypeToTokenType(cardType t)
    return TOKEN_INVALID;
 }
 
+// return true if cardIdxArray is valid, else false
+// this is a helper for the exchange action 
 bool stateMachine::validateCardIdxArray(vector<int> v)
 {
    sort(v.begin(), v.end());

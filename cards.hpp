@@ -14,6 +14,7 @@ enum cardType {CARD_DIAMONDS, CARD_GOLD, CARD_SILVER,
                  CARD_SPICES, CARD_CLOTH, CARD_LEATHER, 
                  CARD_CAMELS, CARD_INVALID};
 
+// an individual card
 class card {
    private:
       cardType type;
@@ -26,6 +27,7 @@ class card {
       friend ostream& operator<<(ostream& os, const card& c);
 };
 
+// a deck of cards for the game Jaipur
 class deck {
    private:
       const int NUM_DIAMONDS = 6;

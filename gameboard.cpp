@@ -10,12 +10,28 @@
 
 using namespace std;
 
+// setup deck, market, tokens
 gameBoard::gameBoard()
+{
+   reset();
+}
+
+// print all public info about game board 
+void gameBoard::printGameState()
+{
+   cout << "Board State:" << endl;
+
+   printMarketState(true);
+   printTokenValues();
+   cout << "Cards in deck: " << deckSize() << endl;
+}
+
+void gameBoard::reset()
 {
    // setup deck
    gameDeck.init();
 
-   // setup cards
+   // setup market
    for (int i=0; i<MARKET_CARD_LEN; i++)
    {
       addMarketCard(gameDeck.popCard());
@@ -114,19 +130,7 @@ gameBoard::gameBoard()
   
 }
 
-void gameBoard::printGameState()
-{
-   cout << "Board State:" << endl;
-
-   printMarketState(true);
-   printTokenValues();
-   cout << "Cards in deck: " << deckSize() << endl;
-}
-
-void gameBoard::reset()
-{
-}
-
+// pop the top token off the tokenList for provided tokenType
 // caller should check for TOKEN_INVALID and not accept if received
 token gameBoard::getToken(tokenType t)
 {
@@ -155,6 +159,8 @@ token gameBoard::getToken(tokenType t)
    };
 }
 
+// print just the market contents
+// either in a compressed or multi-line format, per arg
 void gameBoard::printMarketState(bool compressed)
 {
    if (compressed)
@@ -176,21 +182,7 @@ void gameBoard::printMarketState(bool compressed)
    }
 }
 
-void gameBoard::printTokenCounts()
-{
-   cout << "Token_Counts:";
-   cout << "\tDiamonds_Tokens: " << diamondsTokens.size() << endl;
-   cout << "\tGold_Tokens: " << goldTokens.size() << endl;
-   cout << "\tSilver_Tokens: " << silverTokens.size() << endl;
-   cout << "\tSpices_Tokens: " << spicesTokens.size() << endl;
-   cout << "\tCloth_Tokens: " << clothTokens.size() << endl;
-   cout << "\tLeather_Tokens: " << leatherTokens.size() << endl;
-   cout << "\tCamels_Tokens: " << camelsTokens.size() << endl;
-   cout << "\tThree_of_a_Kind_Tokens: " << threeKindTokens.size() << endl;
-   cout << "\tFour_of_a_Kind_Tokens: " << fourKindTokens.size() << endl;
-   cout << "\tFive_of_a_Kind_Tokens: " << fiveKindTokens.size() << endl;
-}
-
+// print the public and hidden token values/counts
 void gameBoard::printTokenValues()
 {
    cout << endl << "Token_Values (taken from right):" << endl;
@@ -250,6 +242,8 @@ void gameBoard::printTokenValues()
    cout << "\tFive_of_a_Kind_Tokens: " << fiveKindTokens.size() << endl;
 }
 
+// check how many tokenLists are empty
+// this is an end-of-game condition to check
 int gameBoard::sumEmptyTokenLists()
 {
    int sum=0;
@@ -262,6 +256,11 @@ int gameBoard::sumEmptyTokenLists()
    return sum;
 }
 
+// take a card from the market at idx, and optionally
+// draw a new one from the deck to replace the taken one
+//
+// re-draw is done for taking a single good or all camels
+// but not done for exchanges
 card gameBoard::popMarketCard(int idx, bool redraw)
 {
    if (idx >= MARKET_CARD_LEN)
@@ -279,6 +278,7 @@ card gameBoard::popMarketCard(int idx, bool redraw)
    return temp;
 }
 
+// return the type of market card at idx
 cardType gameBoard::getMarketCardType(int idx)
 {
    if (idx >= MARKET_CARD_LEN)

@@ -10,12 +10,14 @@
 
 using namespace std;
 
+// define printing a card as printing the name field
 ostream& operator<<(ostream& os, const card& c)
 {
     os << c.name;
     return os;
 }
 
+// return string name corresponding to cardType
 string card::typeToName(cardType t)
 {
    switch(t)
@@ -39,6 +41,7 @@ string card::typeToName(cardType t)
    };
 }
 
+// remove and return top card from deck
 card deck::popCard()
 {
    if (isEmpty())
@@ -50,6 +53,8 @@ card deck::popCard()
    return retVal;
 }
 
+// fill the deck with cards and shuffle
+// also ensure the top 3 cards are camels
 void deck::shuffle()
 {
    // Create a random number generator

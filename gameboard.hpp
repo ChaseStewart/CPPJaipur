@@ -11,6 +11,7 @@ using namespace std;
 #if !defined __GAMEBOARD_HPP_
 #define __GAMEBOARD_HPP_
 
+// all the objects on the game board
 class gameBoard
 {
    private:
@@ -41,7 +42,6 @@ class gameBoard
       cardType getMarketCardType(int idx);
       token getToken(tokenType t);
       void printMarketState(bool compressed);
-      void printTokenCounts();
       void printTokenValues();
       int getMarketCardLen(){return MARKET_CARD_LEN;}
       unsigned int getUnsignedMarketCardLen(){return (unsigned int) MARKET_CARD_LEN;}
