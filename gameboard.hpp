@@ -31,7 +31,7 @@ class gameBoard
       tokenList  fiveKindTokens;
 
    public:
-      gameBoard();
+      gameBoard(); // always inits the same way
       void reset();
       void printGameState();
       int deckSize(){return gameDeck.size();}

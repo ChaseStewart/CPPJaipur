@@ -60,6 +60,8 @@ void deck::shuffle()
    // Create a random number generator
    random_device rd;
    mt19937 g(rd());
+
+   // deconflict with the name of this function
    std::shuffle(cards.begin(), cards.end(), g); 
 }
 
@@ -68,44 +70,36 @@ void deck::init()
    cards.clear();
 
 
-   // we take out 3 camels because they need to go in the market
-   for (int i=0; i< NUM_CAMELS-3; i++) {
-      card c(CARD_CAMELS);
-      cards.push_back(c);
-   }
+   // The "Mark B trick" - thanks, Mark!
+   struct cardInitStruct_t {
+      int repetitions;
+      cardType type;
+   };
 
-   for (int i=0; i< NUM_DIAMONDS; i++) {
-      card c(CARD_DIAMONDS);
-      cards.push_back(c);
-   }
+   cardInitStruct_t cardInitStruct[] = {
+      {NUM_CAMELS - 3, CARD_CAMELS}, // take out 3 camels to add at end
+      {NUM_DIAMONDS, CARD_DIAMONDS},
+      {NUM_GOLD, CARD_GOLD},
+      {NUM_SILVER, CARD_SILVER},
+      {NUM_SPICES, CARD_SPICES},
+      {NUM_CLOTH, CARD_CLOTH},
+      {NUM_LEATHER, CARD_LEATHER}
+   };
 
-   for (int i=0; i< NUM_GOLD; i++) {
-      card c(CARD_GOLD);
-      cards.push_back(c);
+   for (auto item : cardInitStruct)
+   {
+      for (int i=0; i< item.repetitions; i++)
+      {
+         card c(item.type);
+         cards.push_back(c);
+      }
    }
+   // End the "Mark B trick"
 
-   for (int i=0; i< NUM_SILVER; i++) {
-      card c(CARD_SILVER);
-      cards.push_back(c);
-   }
-
-   for (int i=0; i< NUM_CLOTH; i++) {
-      card c(CARD_CLOTH);
-      cards.push_back(c);
-   }
-
-   for (int i=0; i< NUM_SPICE; i++) {
-      card c(CARD_SPICES);
-      cards.push_back(c);
-   }
-
-   for (int i=0; i< NUM_LEATHER; i++) {
-      card c(CARD_LEATHER);
-      cards.push_back(c);
-   }
-
-   // ensures we will "pop" 3 camels into the market
    shuffle();
+
+   // lastly, add the 3 CAMELS cards we held back
+   // this ensures we will "pop" 3 camels into the market
    cards.push_back(card(CARD_CAMELS));
    cards.push_back(card(CARD_CAMELS));
    cards.push_back(card(CARD_CAMELS));

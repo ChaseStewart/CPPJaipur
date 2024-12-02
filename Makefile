@@ -1,5 +1,5 @@
 # Makefile 
-# cppjaipur
+# Compile cppjaipur
 
 PROG = cppjaipur
 

@@ -20,7 +20,6 @@ class player
       string name;
       vector<card> hand;
       vector<card> herd;
-      bool isGameOver();
 
       tokenList  diamondsTokens;
       tokenList  goldTokens;
@@ -35,7 +34,7 @@ class player
   
    public:
       static const int HAND_LIMIT = 7;
-      player(){id=-1; name="UNINITIALIZED";}
+      player(){id=-1; name="UNINITIALIZED";} // init with a playerId and a name
       void init(int i, string n){id=i; name=n;}
       void addCard(card c);
       card popCard(int idx);
@@ -48,9 +47,8 @@ class player
       string getName(){return name;}
       void printHand(bool compressed);
       void printHerd(){cout << "Herd: " << herd.size() << " camels" << endl;}
-      void printPlayerState();
+      void printPlayerState(); // call printHand and printHerd
       card getMostRecentCard(){return hand.back();}
-      void payCards(vector<int> indices);
       int calculateScore();
 };
 

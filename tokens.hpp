@@ -9,7 +9,9 @@ using namespace std;
 #if !defined __TOKENS_HPP_
 #define __TOKENS_HPP_
 
-enum tokenType {TOKEN_DIAMONDS, TOKEN_GOLD, TOKEN_SILVER, TOKEN_SPICES, TOKEN_CLOTH, TOKEN_LEATHER, TOKEN_CAMELS, TOKEN_3_KIND, TOKEN_4_KIND, TOKEN_5_KIND, TOKEN_INVALID};
+enum tokenType {TOKEN_DIAMONDS, TOKEN_GOLD, TOKEN_SILVER, TOKEN_SPICES,
+                TOKEN_CLOTH, TOKEN_LEATHER, TOKEN_CAMELS, TOKEN_3_KIND,
+                TOKEN_4_KIND, TOKEN_5_KIND, TOKEN_INVALID};
 
 // an individual token
 class token{
@@ -27,7 +29,7 @@ class token{
 
 // a LIFO of tokens, order matters
 class tokenList{
-   protected:
+   private:
       vector<token> tokens;
    public:
       tokenList(){tokens = {};}

@@ -14,7 +14,7 @@ int main()
    string player1name, player2name;
 
    cout << "*** Jaipur in C++ ***" << endl;
-   cout << "\tby Chase E. Stewart" << endl << endl;
+   cout << "by Chase E. Stewart" << endl << endl;
 
    cout << "Enter player1 name: ";
    cin >> player1name;
@@ -25,7 +25,6 @@ int main()
    cout << endl << "*** BEGIN ***" << endl;
 
    stateMachine *sm = new stateMachine(player1name, player2name);
-
 
    while (GS_TERMINATE != sm->getState())
    {

@@ -31,11 +31,15 @@ void gameBoard::reset()
    // setup deck
    gameDeck.init();
 
-   // setup market
+   // setup market by drawing 5 from the deck
+   // because we stuck 3 camels at the end,
+   // at least 3 camels in the market is guaranteed
    for (int i=0; i<MARKET_CARD_LEN; i++)
    {
       addMarketCard(gameDeck.popCard());
    }
+
+   // TODO another candidate for temp struct and reduced logic
 
    // goods tokens are not shuffled
    vector<token> diamondsVec;
@@ -187,55 +191,33 @@ void gameBoard::printTokenValues()
 {
    cout << endl << "Token_Values (taken from right):" << endl;
    
-   // TODO use a struct to replace this repetition
-   cout << "\tDiamonds_Tokens: [";
-   for (auto token : diamondsTokens.getTokens())
-   {
-      cout << token << ", ";
-   }
-   cout << "]" << endl;
+   // The "Mark B trick" again!
+   struct printTokenStruct_t {
+      string name;
+      tokenList tokenlist;
+   };
 
-   cout << "\tGold_Tokens: [";
-   for (auto token : goldTokens.getTokens())
-   {
-      cout << token << ", ";
-   }
-   cout << "]" << endl;
+   printTokenStruct_t printTokenStruct[] = {
+      { "Diamonds", diamondsTokens}, // take out 3 camels to add at end
+      { "Gold", goldTokens},
+      { "Silver", silverTokens},
+      { "Spices", spicesTokens},
+      { "Cloth", clothTokens},
+      { "Leather", leatherTokens},
+      { "Camels", camelsTokens}
+   };
 
-   cout << "\tSilver_Tokens: [";
-   for (auto token : silverTokens.getTokens())
+   for (auto item : printTokenStruct)
    {
-      cout << token << ", ";
-   }
-   cout << "]" << endl;
+      cout << "\t" << item.name << "_Tokens: [";
+      for (auto token : item.tokenlist.getTokens())
+      {
+         cout << token << ", ";
+      }
+      cout << "]" << endl;
 
-   cout << "\tSpices_Tokens: [";
-   for (auto token : spicesTokens.getTokens())
-   {
-      cout << token << ", ";
    }
-   cout << "]" << endl;
-
-   cout << "\tCloth_Tokens: [";
-   for (auto token : clothTokens.getTokens())
-   {
-      cout << token << ", ";
-   }
-   cout << "]" << endl;
-
-   cout << "\tLeather_Tokens: [";
-   for (auto token : leatherTokens.getTokens())
-   {
-      cout << token << ", ";
-   }
-   cout << "]" << endl;
-
-   cout << "\tCamels_Tokens: [";
-   for (auto token : camelsTokens.getTokens())
-   {
-      cout << token << "";
-   }
-   cout << "]" << endl;
+   // End the "Mark B trick"
 
    cout << "\tThree_of_a_Kind_Tokens: " << threeKindTokens.size() << endl;
    cout << "\tFour_of_a_Kind_Tokens: " << fourKindTokens.size() << endl;
