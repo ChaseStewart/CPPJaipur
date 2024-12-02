@@ -198,7 +198,7 @@ void gameBoard::printTokenValues()
    };
 
    printTokenStruct_t printTokenStruct[] = {
-      { "Diamonds", diamondsTokens}, // take out 3 camels to add at end
+      { "Diamonds", diamondsTokens},
       { "Gold", goldTokens},
       { "Silver", silverTokens},
       { "Spices", spicesTokens},
