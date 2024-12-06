@@ -18,29 +18,44 @@ class token{
    private:
       tokenType type;
       string name;
-      string typeToName(tokenType t);
       int score;
+
+      // getters
+      string typeToName(tokenType t);
+
    public:
+      // initialization
       token(tokenType t, int s){type = t; name = typeToName(t); score = s;}
+
+      // getters
       tokenType getType(){return type;}
       int getScore(){return score;}
+
+      // print definition
       friend ostream& operator<<(ostream& os, const token& c);
 };
 
-// a LIFO of tokens, order matters
+// a LIFO of tokens, order matters here
 class tokenList{
    private:
       vector<token> tokens;
+
    public:
+
+      // initialization and reset
       tokenList(){tokens = {};}
-      tokenList(vector<token> tList){init(tList);}
-      void init(vector<token> tList){tokens.swap(tList);}
-      token popToken(){token temp = tokens.back(); tokens.pop_back(); return temp;}
-      void push_back(token t){tokens.push_back(t);}
+      tokenList(vector<token> &tList){init(tList);}
+      void init(vector<token> &tList){tokens.swap(tList);}
       void reset();
-      void shuffle();
-      size_t size(){return tokens.size();}
+
+      // token manipulation
+      token popToken(){token temp = tokens.back(); tokens.pop_back(); return temp;}
       vector<token> getTokens(){return tokens;}
+      void push_back(token t){tokens.push_back(t);}
+      void shuffle(); // destructive, of course
+
+      // getters
+      size_t size(){return tokens.size();}
       bool isEmpty(){return (tokens.size() == 0);}
 };
 

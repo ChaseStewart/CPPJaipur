@@ -182,7 +182,7 @@ void player::printHand(bool compressed)
 }
 
 // count all cards of provided cardType
-int player::countCardsByType(cardType t)
+int player::countGoodsCardsByType(cardType t)
 {
    int sum = 0;
    for (int i=handSize() -1; i >= 0; i--)
@@ -198,7 +198,7 @@ int player::countCardsByType(cardType t)
 
 // remove all cards of provided cardType
 // obviously this is destructive
-void player::sellCardsByType(cardType t)
+void player::sellGoodsCardsByType(cardType t)
 {
    for (int i=handSize() -1; i >= 0; i--)
    {

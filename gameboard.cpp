@@ -10,12 +10,6 @@
 
 using namespace std;
 
-// setup deck, market, tokens
-gameBoard::gameBoard()
-{
-   reset();
-}
-
 // print all public info about game board 
 void gameBoard::printGameState()
 {
@@ -39,99 +33,45 @@ void gameBoard::reset()
       addMarketCard(gameDeck.popCard());
    }
 
-   // TODO another candidate for temp struct and reduced logic
+   const int MAX_TOKEN_ARRAY = 10;
+   struct createTokenStruct_t {
+      tokenType type;
+      tokenList *list;
+      int scores[MAX_TOKEN_ARRAY];
+   };
 
-   // goods tokens are not shuffled
-   vector<token> diamondsVec;
-   diamondsVec.push_back(token(TOKEN_DIAMONDS, 5));
-   diamondsVec.push_back(token(TOKEN_DIAMONDS, 5));
-   diamondsVec.push_back(token(TOKEN_DIAMONDS, 5));
-   diamondsVec.push_back(token(TOKEN_DIAMONDS, 7));
-   diamondsVec.push_back(token(TOKEN_DIAMONDS, 7));
-   diamondsTokens.init(diamondsVec);  
+   createTokenStruct_t createTokenStruct[] = {
+      {TOKEN_DIAMONDS, &diamondsTokens, {5,5,5,7,7}},
+      {TOKEN_GOLD, &goldTokens, {5,5,5,6,6}},
+      {TOKEN_SILVER, &silverTokens, {5,5,5,5,5}},
+      {TOKEN_SPICES, &spicesTokens, {1,1,2,2,3,3,5}},
+      {TOKEN_CLOTH, &clothTokens, {1,1,2,2,3,3,5}},
+      {TOKEN_LEATHER, &leatherTokens, {1,1,1,1,1,1,2,3,4}},
+      {TOKEN_CAMELS, &camelsTokens, {5}},
+      {TOKEN_3_KIND, &threeKindTokens, {1,1,2,2,2,3,3}},
+      {TOKEN_4_KIND, &fourKindTokens, {4,4,5,5,6,6}},
+      {TOKEN_5_KIND, &fiveKindTokens, {8,8,9,10,10}}
+   };
 
-   vector<token> goldVec;
-   goldVec.push_back(token(TOKEN_GOLD, 5));
-   goldVec.push_back(token(TOKEN_GOLD, 5));
-   goldVec.push_back(token(TOKEN_GOLD, 5));
-   goldVec.push_back(token(TOKEN_GOLD, 6));
-   goldVec.push_back(token(TOKEN_GOLD, 6));
-   goldTokens.init(goldVec);  
+   for (auto item : createTokenStruct)
+   {
+      vector<token> *temp = new vector<token> ();
+      for (auto score : item.scores)
+      {
+         if (score > 0)
+         {
+            temp->push_back(token(item.type, score));
+         }
+      }
+      item.list->init(*temp);
+      delete(temp);
+   }
 
-   vector<token> silverVec;
-   silverVec.push_back(token(TOKEN_SILVER, 5));
-   silverVec.push_back(token(TOKEN_SILVER, 5));
-   silverVec.push_back(token(TOKEN_SILVER, 5));
-   silverVec.push_back(token(TOKEN_SILVER, 5));
-   silverVec.push_back(token(TOKEN_SILVER, 5));
-   silverTokens.init(silverVec);  
-
-   vector<token> spicesVec;
-   spicesVec.push_back(token(TOKEN_SPICES, 1));
-   spicesVec.push_back(token(TOKEN_SPICES, 1));
-   spicesVec.push_back(token(TOKEN_SPICES, 2));
-   spicesVec.push_back(token(TOKEN_SPICES, 2));
-   spicesVec.push_back(token(TOKEN_SPICES, 3));
-   spicesVec.push_back(token(TOKEN_SPICES, 3));
-   spicesVec.push_back(token(TOKEN_SPICES, 5));
-   spicesTokens.init(spicesVec);  
-
-   vector<token> clothVec;
-   clothVec.push_back(token(TOKEN_CLOTH, 1));
-   clothVec.push_back(token(TOKEN_CLOTH, 1));
-   clothVec.push_back(token(TOKEN_CLOTH, 2));
-   clothVec.push_back(token(TOKEN_CLOTH, 2));
-   clothVec.push_back(token(TOKEN_CLOTH, 3));
-   clothVec.push_back(token(TOKEN_CLOTH, 3));
-   clothVec.push_back(token(TOKEN_CLOTH, 5));
-   clothTokens.init(clothVec);  
-
-   vector<token> leatherVec;
-   leatherVec.push_back(token(TOKEN_LEATHER, 1));
-   leatherVec.push_back(token(TOKEN_LEATHER, 1));
-   leatherVec.push_back(token(TOKEN_LEATHER, 1));
-   leatherVec.push_back(token(TOKEN_LEATHER, 1));
-   leatherVec.push_back(token(TOKEN_LEATHER, 1));
-   leatherVec.push_back(token(TOKEN_LEATHER, 1));
-   leatherVec.push_back(token(TOKEN_LEATHER, 2));
-   leatherVec.push_back(token(TOKEN_LEATHER, 3));
-   leatherVec.push_back(token(TOKEN_LEATHER, 4));
-   leatherTokens.init(leatherVec);
-   
-   vector<token> camelsVec;
-   camelsVec.push_back(token(TOKEN_CAMELS, 5));
-   camelsTokens.init(camelsVec);
-
-   vector<token> threeKindVec;
-   threeKindVec.push_back(token(TOKEN_3_KIND, 1));
-   threeKindVec.push_back(token(TOKEN_3_KIND, 1));
-   threeKindVec.push_back(token(TOKEN_3_KIND, 2));
-   threeKindVec.push_back(token(TOKEN_3_KIND, 2));
-   threeKindVec.push_back(token(TOKEN_3_KIND, 2));
-   threeKindVec.push_back(token(TOKEN_3_KIND, 3));
-   threeKindVec.push_back(token(TOKEN_3_KIND, 3));
-   threeKindTokens.init(threeKindVec);
+   // shuffle the n-of-a-kind tokens only per the rules
    threeKindTokens.shuffle();
-
-   vector<token> fourKindVec;
-   fourKindVec.push_back(token(TOKEN_4_KIND, 4));
-   fourKindVec.push_back(token(TOKEN_4_KIND, 4));
-   fourKindVec.push_back(token(TOKEN_4_KIND, 5));
-   fourKindVec.push_back(token(TOKEN_4_KIND, 5));
-   fourKindVec.push_back(token(TOKEN_4_KIND, 6));
-   fourKindVec.push_back(token(TOKEN_4_KIND, 6));
-   fourKindTokens.init(fourKindVec);
    fourKindTokens.shuffle();
-
-   vector<token> fiveKindVec;
-   fiveKindVec.push_back(token(TOKEN_5_KIND, 8));
-   fiveKindVec.push_back(token(TOKEN_5_KIND, 8));
-   fiveKindVec.push_back(token(TOKEN_5_KIND, 9));
-   fiveKindVec.push_back(token(TOKEN_5_KIND, 10));
-   fiveKindVec.push_back(token(TOKEN_5_KIND, 10));
-   fiveKindTokens.init(fiveKindVec);
    fiveKindTokens.shuffle();
-  
+
 }
 
 // pop the top token off the tokenList for provided tokenType

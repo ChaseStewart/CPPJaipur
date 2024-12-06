@@ -37,11 +37,12 @@ string card::typeToName(cardType t)
       case CARD_CAMELS:
          return "Camels";
       default:
-         return "INVALID!";
+         return "Invalid";
    };
 }
 
 // remove and return top card from deck
+// caller should handle receiving CARD_INVALID properly
 card deck::popCard()
 {
    if (isEmpty())
@@ -61,7 +62,7 @@ void deck::shuffle()
    random_device rd;
    mt19937 g(rd());
 
-   // deconflict with the name of this function
+   // std scope, to deconflict with the name of this function
    std::shuffle(cards.begin(), cards.end(), g); 
 }
 
@@ -77,7 +78,7 @@ void deck::init()
    };
 
    cardInitStruct_t cardInitStruct[] = {
-      {NUM_CAMELS - 3, CARD_CAMELS}, // take out 3 camels to add at end
+      {NUM_CAMELS - 3, CARD_CAMELS}, // take out 3 camels cards to add at end
       {NUM_DIAMONDS, CARD_DIAMONDS},
       {NUM_GOLD, CARD_GOLD},
       {NUM_SILVER, CARD_SILVER},
@@ -86,6 +87,8 @@ void deck::init()
       {NUM_LEATHER, CARD_LEATHER}
    };
 
+   // pare down repetitive code by iterating over a locally scoped
+   // struct that just includes the variables that change per repetition
    for (auto item : cardInitStruct)
    {
       for (int i=0; i< item.repetitions; i++)
@@ -98,7 +101,7 @@ void deck::init()
 
    shuffle();
 
-   // lastly, add the 3 CAMELS cards we held back
+   // lastly, add the 3 camels cards we held back
    // this ensures we will "pop" 3 camels into the market
    cards.push_back(card(CARD_CAMELS));
    cards.push_back(card(CARD_CAMELS));

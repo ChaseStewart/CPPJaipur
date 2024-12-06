@@ -18,9 +18,12 @@ class player
    private:
       int id;
       string name;
+
       vector<card> hand;
       vector<card> herd;
 
+      // these start empty and then are summed
+      // for the final score
       tokenList  diamondsTokens;
       tokenList  goldTokens;
       tokenList  silverTokens;
@@ -34,22 +37,34 @@ class player
   
    public:
       static const int HAND_LIMIT = 7;
+
+      // initialization
       player(){id=-1; name="UNINITIALIZED";} // init with a playerId and a name
       void init(int i, string n){id=i; name=n;}
+
+      // goods card manipulation (the hand)
       void addCard(card c);
       card popCard(int idx);
-      void addToken(token t);
-      card popCamel();
-      int countCardsByType(cardType t);
-      void sellCardsByType(cardType t);
+      int countGoodsCardsByType(cardType t);
+      void sellGoodsCardsByType(cardType t);
+      card getMostRecentCard(){return hand.back();}
       int handSize(){return hand.size();}
+
+      // camel card manipulation (the herd)
+      card popCamel(); // separate command, camels are stored separately
       int herdSize(){return herd.size();}
-      string getName(){return name;}
+
+      // token manipulation
+      void addToken(token t);
+
+      // printing
       void printHand(bool compressed);
       void printHerd(){cout << "Herd: " << herd.size() << " camels" << endl;}
       void printPlayerState(); // call printHand and printHerd
-      card getMostRecentCard(){return hand.back();}
+
+      // getters
       int calculateScore();
+      string getName(){return name;}
 };
 
 #endif // __PLAYER_HPP_

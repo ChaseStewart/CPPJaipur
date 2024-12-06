@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+
 #include "cards.hpp"
 #include "tokens.hpp"
 
@@ -31,21 +32,32 @@ class gameBoard
       tokenList  fiveKindTokens;
 
    public:
-      gameBoard(); // always inits the same way
+      // initialization
+      gameBoard(){reset();} // always inits the same way
       void reset();
-      void printGameState();
-      int deckSize(){return gameDeck.size();}
-      bool deckIsEmpty(){return gameDeck.isEmpty();}
+
+      // deck manipulation
       card drawCard(){return gameDeck.popCard();}
+      bool deckIsEmpty(){return gameDeck.isEmpty();}
+
+      // market manipulation
       card popMarketCard(int idx, bool redraw);
       void addMarketCard(card c) {marketCards.push_back(c);}
       cardType getMarketCardType(int idx);
+
+      // tokenList manipulation
       token getToken(tokenType t);
+      int sumEmptyTokenLists();
+
+      // printing
+      void printGameState();
       void printMarketState(bool compressed);
       void printTokenValues();
+
+      // getters
       int getMarketCardLen(){return MARKET_CARD_LEN;}
       unsigned int getUnsignedMarketCardLen(){return (unsigned int) MARKET_CARD_LEN;}
-      int sumEmptyTokenLists();
+      int deckSize(){return gameDeck.size();}
 };
 
 #endif // __GAMEBOARD_HPP_

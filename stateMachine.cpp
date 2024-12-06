@@ -53,16 +53,8 @@ void stateMachine::step()
          break;
 
       case GS_P0_VALIDATE_ACTION:
-         if (executePlayerAction(0))
-         {
-            action = PA_NO_ACTION;
-            state = GS_P1_ACK;
-         }
-         else
-         {
-            action = PA_NO_ACTION;
-            state = GS_P0_TAKE_ACTION;
-         }
+         action = PA_NO_ACTION;
+         state = (executePlayerAction(0)) ? GS_P1_ACK : GS_P0_TAKE_ACTION;
          break;
 
       case GS_P1_ACK:
@@ -79,16 +71,8 @@ void stateMachine::step()
          break;
 
       case GS_P1_VALIDATE_ACTION:
-         if (executePlayerAction(1))
-         {
-            action = PA_NO_ACTION;
-            state = GS_P0_ACK;
-         }
-         else
-         {
-            action = PA_NO_ACTION;
-            state = GS_P1_TAKE_ACTION;
-         }
+         action = PA_NO_ACTION;
+         state = (executePlayerAction(1)) ? GS_P0_ACK : GS_P1_TAKE_ACTION;
          break; 
 
       case GS_FINAL_SCORING:
@@ -149,7 +133,7 @@ void stateMachine::getPlayerAction(int id)
 {
    const int STRLEN = 5;
 
-   char actionStr[STRLEN];
+   char actionStr[STRLEN] = {0};
    int actionInt = 0;
    cout << endl << "* " << players[id].getName() << ", choose an action:" << endl;
    cout << PA_TAKE_GOOD << ". Take a goods card" << endl;
@@ -163,7 +147,9 @@ void stateMachine::getPlayerAction(int id)
    {
        cin.clear();
        cin.ignore(INT_MAX, '\n');
+       return;
    }
+   cout << "\tGot Str: " << actionStr << endl;
 
   try 
   {
@@ -173,14 +159,14 @@ void stateMachine::getPlayerAction(int id)
   {
 	  cout << "Invalid action: invalid action selected" << endl;
           action = PA_NO_ACTION;
+          cin.clear();
+          cin.ignore(INT_MAX, '\n');
           return;
   }
+  cout << "\tGot Int: " << actionInt << endl;
 
   switch (actionInt)
   {
-     case PA_NO_ACTION:
-        action = PA_NO_ACTION;
-        break;
      case PA_TAKE_GOOD:
         action = PA_TAKE_GOOD;
         break;
@@ -201,6 +187,7 @@ void stateMachine::getPlayerAction(int id)
         break;
      default:
         action = PA_NO_ACTION;
+        cout << "Error: Str " << actionStr << " is not valid!" << endl; 
         break;
   };
 }
@@ -239,7 +226,9 @@ bool stateMachine::executePlayerAction(int i)
          return false;
       case PA_NO_ACTION:
       default:
-         cout << "Invalid Action selected" << endl;
+         cout << "Invalid Action selected: " << action << endl;
+         cin.clear();
+         cin.ignore(INT_MAX, '\n');
          return false;
    };
    cout << "\tPlaceholder: should not get here! " << endl;
@@ -260,11 +249,7 @@ bool stateMachine::executeTakeGood(int playerId)
 
    cout << "Your selection (0 to cancel): ";
    cin >> cardId;
-   if (cardId > board.getMarketCardLen())
-   {
-      cardId = 0;
-   }
-   if (cardId == 0)
+   if (cardId > board.getMarketCardLen() || cardId == 0)
    {
       return false;
    }
@@ -509,7 +494,7 @@ bool stateMachine::executeSellGoods(int id)
    tokenType tokenSel = cardTypeToTokenType(cardSel);
    card nameCard = card(cardSel);
 
-   int sellCount = players[id].countCardsByType(cardSel);
+   int sellCount = players[id].countGoodsCardsByType(cardSel);
 
    if (sellCount < minSellCount)
    {
@@ -519,7 +504,7 @@ bool stateMachine::executeSellGoods(int id)
 
    // The Sale is now validated
    cout << "Selling " << sellCount << " copies of " << nameCard << endl;
-   players[id].sellCardsByType(cardSel);
+   players[id].sellGoodsCardsByType(cardSel);
 
    for (int i=0; i < sellCount; i++)
    {

@@ -20,15 +20,22 @@ class card {
       cardType type;
       string name;
       string typeToName(cardType t);
+
    public:
+      // initialization
       card(cardType t){type = t; name = typeToName(t);} // provide a cardType to init
+
+      // getters
       cardType getType(){return type;}
+
+      // custom print operator for cards
       friend ostream& operator<<(ostream& os, const card& c);
 };
 
 // a deck of cards for the game Jaipur
 class deck {
    private:
+      // private card counts
       const int NUM_DIAMONDS = 6;
       const int NUM_GOLD = 6;
       const int NUM_SILVER = 6;
@@ -41,17 +48,20 @@ class deck {
                             NUM_SPICES + NUM_LEATHER + NUM_CAMELS; // empirically 55
  
       std::vector<card> cards;
-      void shuffle();
+      void shuffle(); // scoped to deck, not std::shuffle()
 
    public:
-      deck() { init(); } // always inits to same state, no args
-      ~deck() { cards.clear(); }
+      // initialization
+      deck() {init();} // always inits to same state, no args
+      ~deck() {cards.clear();}
       void init();
 
+      // card manipulation
       card popCard();
 
-      int size(){ return cards.size(); }
-      bool isEmpty() { return cards.size() == 0; }
+      // getters
+      int size(){return cards.size();}
+      bool isEmpty() {return cards.size() == 0;}
 };
 
 #endif // __CARDS_HPP_
